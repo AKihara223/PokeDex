@@ -1,0 +1,90 @@
+<html>
+<head>
+<meta charset="utf-8">
+	<title>Pokemon</title>
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+  <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+
+<script>
+	function getpics(){
+		for(i=1;i<152;i++){
+			$('.poke').append("<img class='" +i+"' src='http://pokeapi.co/media/img/"+i+".png'>");
+		}
+	}
+
+	function getpokemon(){
+			var mon="";
+		$("img").click(function(){
+			mon =  $(this).attr("class");
+			
+			$.get("http://pokeapi.co/api/v1/pokemon/"+mon+"/", function(res) {
+			//description url	
+			var des = "http://pokeapi.co"+res.descriptions[0].resource_uri;
+
+				$('.dexname').html("<h2>Name: "+res.name+"</h2>");
+				$('.deximg').html("<img src='http://pokeapi.co/media/img/"+mon+".png'>");
+				$('.stats').html("<h3>Type: "+res.types[0].name+"</h3><h3>Height: "+res.height+"</h3><h3>Weight: "+res.weight+"</h3>");
+			$.get(des, function(data){
+				console.log(data);
+				$('.dexdesc').html(data.description);
+			}, "json"); 
+				
+
+			}, "json");	
+		});
+
+	}
+
+
+	$(document).ready(function(){
+		getpics();
+		getpokemon();
+		
+	});
+
+</script>
+<style type="text/css">
+	.container{
+		background-color:black;
+	}	
+	.poke{
+		display:inline-block;
+		width:60%;
+		margin:1%;
+	}
+	img{
+		padding:2%;
+	}
+	.dex{
+		border:10px solid red;
+		padding-left:20px;
+		padding-right:10px;
+		display:inline-block;
+		height:500px;
+		width:300px;
+		vertical-align:top;
+		position:fixed;
+		margin-left:5%;
+		color:white;
+	}
+	.dexdesc{
+		padding-right:10px;
+	}
+
+</style>
+</head>
+
+<body>
+	<div class="container col-md-12">
+		<div class="poke col-md-5"></div>
+		<div class="dex col-md-4">
+			<div class="dexname"></div>
+			<div class="deximg"></div>
+			<div class="stats"></div>
+			<div class="dexdesc"></div>
+		</div>
+	</div>
+
+</body>
+</html>
